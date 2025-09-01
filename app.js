@@ -12,45 +12,32 @@ function renderList() {
   bucketList.forEach((item, index) => {
     const li = document.createElement("li");
     li.innerHTML = `
-      ${item.name}
-      <button onclick="markCompleted(${index})">✔️</button>
+      <span class="text">${item.name}</span>
+      <div class="buttons">
+        <button onclick="markCompleted(${index})" title="Marcar como completado">✔️</button>
+        <button onclick="deletePending(${index})" title="Borrar actividad">🗑️</button>
+      </div>
     `;
     ul.appendChild(li);
   });
 
   const cul = document.getElementById("completed-list");
   cul.innerHTML = "";
-  completedList.forEach(item => {
+  completedList.forEach((item, index) => {
     const li = document.createElement("li");
     li.classList.add("completed");
     li.innerHTML = `
-      ${item.name}<br/>
-      <small>${item.date}</small><br/>
-      ${item.photo ? `<img src="${item.photo}" alt="Foto">` : ""}
+      <span class="text">
+        ${item.name}<br/>
+        <small>${item.date}</small><br/>
+        ${item.photo ? `<img src="${item.photo}" alt="Foto">` : ""}
+      </span>
+      <div class="buttons">
+        <button onclick="deleteCompleted(${index})" title="Borrar actividad">🗑️</button>
+      </div>
     `;
     cul.appendChild(li);
   });
-}
-
-function addItem() {
-  const input = document.getElementById("new-item");
-  if (!input.value.trim()) return;
-  bucketList.push({ name: input.value.trim() });
-  input.value = "";
-  saveData();
-  renderList();
-}
-
-function markCompleted(index) {
-  const item = bucketList.splice(index, 1)[0];
-  const photo = prompt("URL de una foto del recuerdo (opcional):");
-  const date = new Date().toLocaleDateString();
-  completedList.push({ ...item, date, photo });
-  saveData();
-  renderList();
-}
-function renderList() {
-  // ... ya existente ...
 
   const gallery = document.getElementById("gallery");
   gallery.innerHTML = "";
@@ -62,42 +49,76 @@ function renderList() {
     }
   });
 }
-// Guardar la fecha de inicio si no existe
-if (!localStorage.getItem("startDate")) {
-  localStorage.setItem("startDate", new Date().toISOString());
-}
-function unlockSecretActivities() {
-  const now = new Date();
-  const daysPassed = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-  let unlockedCount = 0;
 
-  secretActivities.forEach(secret => {
-    const alreadyExists = bucketList.some(item => item.name === secret.name) ||
-                          completedList.some(item => item.name === secret.name);
-    if (!alreadyExists && daysPassed >= secret.days) {
-      bucketList.push({ name: secret.name });
-      unlockedCount++;
-    }
-  });
-
-  if (unlockedCount > 0) {
+function addTask() {
+  const input = document.getElementById("task-input");
+  const value = input.value.trim();
+  if (value) {
+    bucketList.push({ name: value });
     saveData();
-    alert(`🎉 ¡Se han desbloqueado ${unlockedCount} nueva(s) actividad(es) secreta(s)!`);
+    renderList();
+    input.value = "";
   }
 }
-unlockSecretActivities();
+
+function markCompleted(index) {
+  const item = bucketList.splice(index, 1)[0];
+  const date = new Date().toLocaleDateString();
+
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = "image/*";
+  fileInput.capture = "environment";
+  fileInput.style.display = "none";
+
+  fileInput.onchange = () => {
+    const file = fileInput.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const photo = e.target.result;
+        completedList.push({ ...item, date, photo });
+        saveData();
+        renderList();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      completedList.push({ ...item, date });
+      saveData();
+      renderList();
+    }
+  };
+
+  document.body.appendChild(fileInput);
+  fileInput.click();
+  document.body.removeChild(fileInput);
+}
+
+function deletePending(index) {
+  if (confirm("¿Quieres borrar esta actividad pendiente?")) {
+    bucketList.splice(index, 1);
+    saveData();
+    renderList();
+  }
+}
+
+function deleteCompleted(index) {
+  if (confirm("¿Quieres borrar esta actividad completada?")) {
+    completedList.splice(index, 1);
+    saveData();
+    renderList();
+  }
+}
+
+document.getElementById("add-task-btn").addEventListener("click", addTask);
+
+document.getElementById("task-input").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    addTask();
+  }
+});
+
+// Renderizamos la lista al cargar
 renderList();
 
-
-const startDate = new Date(localStorage.getItem("startDate"));
-
-// Actividades ocultas que se desbloquean con el tiempo
-const secretActivities = [
-  { days: 3, name: "Ver el atardecer juntos 🌅" },
-  { days: 5, name: "Hacer una cena casera 🥘" },
-  { days: 7, name: "Escribir una carta de amor 💌" },
-  { days: 10, name: "Jugar a un juego de mesa 🎲" },
-  { days: 14, name: "Tener una noche sin pantallas 📵" },
-];
-
-renderList();

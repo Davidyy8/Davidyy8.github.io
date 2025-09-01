@@ -2,35 +2,26 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Things With You Web</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bucket List Luisa y David</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="app">
-    <header>
-      <h1>🧡 Things With You</h1>
-      <p>Tu lista compartida de cosas por hacer</p>
-    </header>
-
-    <section id="add-form">
-      <input type="text" id="new-item" placeholder="Escribe una actividad..." />
-      <button onclick="addItem()">➕ Agregar</button>
-    </section>
-
-    <ul id="bucket-list"></ul>
-
-    <section id="completed-section">
-      <h2>✅ Completadas</h2>
-      <ul id="completed-list"></ul>
-    </section>
+  <h1><span style="color:pink;">&hearts;</span> Bucket List Luisa y David <span style="color:pink;">&hearts;</span></h1>
+  <div id="new-task">
+    <input type="text" id="task-input" placeholder="Añade una nueva actividad..." />
+    <button id="add-task-btn">Añadir</button>
   </div>
 
-  <script src="app.js"></script>
-  <section id="photo-gallery">
-  <h2>📸 Galería de Recuerdos</h2>
-  <div class="gallery-grid" id="gallery"></div>
-</section>
+  <h2>Actividades Pendientes</h2>
+  <ul id="bucket-list"></ul>
 
+  <h2>Actividades Completadas</h2>
+  <ul id="completed-list"></ul>
+
+  <h2>Galería de Fotos</h2>
+  <div id="gallery"></div>
+
+  <script src="app.js"></script>
 </body>
 </html>
