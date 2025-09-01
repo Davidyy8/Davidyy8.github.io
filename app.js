@@ -283,7 +283,25 @@ function deleteTask(taskId) {
     .then(loadTasks)
     .catch(console.error);
 }
-
+auth.onAuthStateChanged(user => {
+  if (user) {
+    // Usuario logueado: mostrar app, ocultar auth
+    document.getElementById("auth-section").style.display = "none";
+    document.getElementById("app-section").style.display = "block";
+    document.getElementById("logout-btn").style.display = "inline-block";
+    
+    // Aquí puedes cargar datos, etc.
+    loadTasks();
+  } else {
+    // No logueado: mostrar auth, ocultar app
+    document.getElementById("auth-section").style.display = "block";
+    document.getElementById("app-section").style.display = "none";
+    document.getElementById("logout-btn").style.display = "none";
+  }
+});
+document.getElementById("logout-btn").addEventListener("click", () => {
+  auth.signOut();
+});
 // Renderizamos la lista al cargar
 renderList();
 
