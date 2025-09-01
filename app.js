@@ -1,4 +1,4 @@
-// 🔧 Configuración Firebase
+// Config Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBnvwwxjZXSsegb9QVsWbElqJkzkuEjO1o",
   authDomain: "withyou-4a6e7.firebaseapp.com",
@@ -9,20 +9,23 @@ const firebaseConfig = {
   measurementId: "G-V1Q0NW24CS"
 };
 
-// 🔥 Inicializar Firebase
+// Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// 🎯 Referencias DOM
+// Referencias DOM
 const addTaskBtn = document.getElementById('add-task-btn');
 const taskInput = document.getElementById('task-input');
 const bucketListUl = document.getElementById('bucket-list');
 const completedListUl = document.getElementById('completed-list');
 
-// ➕ Añadir tarea
+// Añadir tarea al pulsar botón
 addTaskBtn.addEventListener('click', () => {
   const taskName = taskInput.value.trim();
-  if (!taskName) return;
+  if (!taskName) {
+    alert('Por favor, escribe una tarea');
+    return;
+  }
 
   db.collection('publicTasks').add({
     name: taskName,
@@ -33,15 +36,19 @@ addTaskBtn.addEventListener('click', () => {
     taskInput.value = '';
     loadTasks();
   })
-  .catch(console.error);
+  .catch(error => {
+    console.error("Error añadiendo tarea:", error);
+    alert('Error al añadir la tarea, revisa la consola');
+  });
 });
 
-// 📥 Cargar tareas
+// Cargar tareas
 function loadTasks() {
-  clearLists();
+  bucketListUl.innerHTML = '';
+  completedListUl.innerHTML = '';
 
   db.collection('publicTasks')
-    .orderBy('createdAt')
+    .orderBy('createdAt', 'asc')
     .get()
     .then(snapshot => {
       snapshot.forEach(doc => {
@@ -51,12 +58,14 @@ function loadTasks() {
 
         const completeBtn = document.createElement('button');
         completeBtn.textContent = '✔️';
-        completeBtn.title = 'Completar';
+        completeBtn.title = 'Completar tarea';
+        completeBtn.style.marginLeft = '10px';
         completeBtn.onclick = () => completeTask(doc.id);
 
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = '🗑️';
-        deleteBtn.title = 'Eliminar';
+        deleteBtn.title = 'Eliminar tarea';
+        deleteBtn.style.marginLeft = '5px';
         deleteBtn.onclick = () => deleteTask(doc.id);
 
         if (task.completed) {
@@ -70,31 +79,33 @@ function loadTasks() {
         }
       });
     })
-    .catch(console.error);
+    .catch(error => {
+      console.error("Error cargando tareas:", error);
+      alert('Error al cargar tareas, revisa la consola');
+    });
 }
 
-// ✅ Completar tarea
+// Marcar tarea como completada
 function completeTask(taskId) {
   db.collection('publicTasks').doc(taskId)
     .update({ completed: true })
     .then(loadTasks)
-    .catch(console.error);
+    .catch(error => {
+      console.error("Error completando tarea:", error);
+      alert('Error al completar tarea, revisa la consola');
+    });
 }
 
-// ❌ Borrar tarea
+// Borrar tarea
 function deleteTask(taskId) {
   db.collection('publicTasks').doc(taskId)
     .delete()
     .then(loadTasks)
-    .catch(console.error);
+    .catch(error => {
+      console.error("Error borrando tarea:", error);
+      alert('Error al borrar tarea, revisa la consola');
+    });
 }
 
-// 🧹 Limpiar listas
-function clearLists() {
-  bucketListUl.innerHTML = '';
-  completedListUl.innerHTML = '';
-}
-
-// 🔁 Cargar tareas al cargar la página
+// Cargar tareas al abrir la página
 window.addEventListener('load', loadTasks);
-
