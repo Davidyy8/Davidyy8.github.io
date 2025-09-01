@@ -23,5 +23,39 @@
   <div id="gallery"></div>
 
   <script src="app.js"></script>
+  <!-- Firebase App (core) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+
+<!-- Firebase Authentication -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+<!-- Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+<div id="auth-section">
+  <h2>Registrarse</h2>
+  <input type="email" id="register-email" placeholder="Email" />
+  <input type="password" id="register-password" placeholder="Contraseña" />
+  <button id="register-btn">Registrarse</button>
+
+  <h2>Iniciar sesión</h2>
+  <input type="email" id="login-email" placeholder="Email" />
+  <input type="password" id="login-password" placeholder="Contraseña" />
+  <button id="login-btn">Iniciar sesión</button>
+
+  <button id="logout-btn" style="display:none;">Cerrar sesión</button>
+</div>
+<div id="app-section" style="display:none;">
+  <h1>Bucket List</h1>
+  <input type="text" id="task-input" placeholder="Añade una nueva actividad..." />
+  <button id="add-task-btn">Añadir</button>
+
+  <h2>Actividades Pendientes</h2>
+  <ul id="bucket-list"></ul>
+
+  <h2>Actividades Completadas</h2>
+  <ul id="completed-list"></ul>
+</div>
+
 </body>
 </html>
