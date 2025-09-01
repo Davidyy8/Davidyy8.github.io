@@ -11,92 +11,36 @@ const firebaseConfig = {
 
 // 🔥 Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
 const db = firebase.firestore();
 
 // 🎯 Referencias DOM
-const authSection = document.getElementById('auth-section');
-const appSection = document.getElementById('app-section');
-const logoutBtn = document.getElementById('logout-btn');
-const registerBtn = document.getElementById('register-btn');
-const loginBtn = document.getElementById('login-btn');
 const addTaskBtn = document.getElementById('add-task-btn');
 const taskInput = document.getElementById('task-input');
 const bucketListUl = document.getElementById('bucket-list');
 const completedListUl = document.getElementById('completed-list');
-
-let currentUserId = null;
-
-// 👤 Registro
-registerBtn.addEventListener('click', () => {
-  const email = document.getElementById('register-email').value.trim();
-  const password = document.getElementById('register-password').value.trim();
-
-  if (!email || !password) return alert('Completa los campos');
-
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(() => alert('Registrado e iniciado'))
-    .catch(e => alert(e.message));
-});
-
-// 🔐 Login
-loginBtn.addEventListener('click', () => {
-  const email = document.getElementById('login-email').value.trim();
-  const password = document.getElementById('login-password').value.trim();
-
-  if (!email || !password) return alert('Completa los campos');
-
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => alert('Sesión iniciada'))
-    .catch(e => alert(e.message));
-});
-
-// 🔓 Logout
-logoutBtn.addEventListener('click', () => auth.signOut());
-
-// 👀 Estado de sesión
-auth.onAuthStateChanged(user => {
-  if (user) {
-    currentUserId = user.uid;
-    authSection.style.display = 'none';
-    appSection.style.display = 'block';
-    logoutBtn.style.display = 'inline-block';
-    loadTasks();
-  } else {
-    currentUserId = null;
-    authSection.style.display = 'block';
-    appSection.style.display = 'none';
-    logoutBtn.style.display = 'none';
-    clearLists();
-  }
-});
 
 // ➕ Añadir tarea
 addTaskBtn.addEventListener('click', () => {
   const taskName = taskInput.value.trim();
   if (!taskName) return;
 
-  const task = {
+  db.collection('publicTasks').add({
     name: taskName,
     completed: false,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-  };
-
-  db.collection('users').doc(currentUserId).collection('tasks').add(task)
-    .then(() => {
-      taskInput.value = '';
-      loadTasks();
-    })
-    .catch(console.error);
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  .then(() => {
+    taskInput.value = '';
+    loadTasks();
+  })
+  .catch(console.error);
 });
 
 // 📥 Cargar tareas
 function loadTasks() {
-  if (!currentUserId) return;
-
   clearLists();
 
-  db.collection('users').doc(currentUserId).collection('tasks')
+  db.collection('publicTasks')
     .orderBy('createdAt')
     .get()
     .then(snapshot => {
@@ -129,17 +73,17 @@ function loadTasks() {
     .catch(console.error);
 }
 
-// ✅ Completar
+// ✅ Completar tarea
 function completeTask(taskId) {
-  db.collection('users').doc(currentUserId).collection('tasks').doc(taskId)
+  db.collection('publicTasks').doc(taskId)
     .update({ completed: true })
     .then(loadTasks)
     .catch(console.error);
 }
 
-// ❌ Borrar
+// ❌ Borrar tarea
 function deleteTask(taskId) {
-  db.collection('users').doc(currentUserId).collection('tasks').doc(taskId)
+  db.collection('publicTasks').doc(taskId)
     .delete()
     .then(loadTasks)
     .catch(console.error);
@@ -150,4 +94,8 @@ function clearLists() {
   bucketListUl.innerHTML = '';
   completedListUl.innerHTML = '';
 }
+
+// 📦 Cargar tareas al inicio
+window.addEventListener('load', loadTasks);
+
 
