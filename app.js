@@ -95,7 +95,6 @@ function clearLists() {
   completedListUl.innerHTML = '';
 }
 
-// 📦 Cargar tareas al inicio
+// 🔁 Cargar tareas al cargar la página
 window.addEventListener('load', loadTasks);
-
 

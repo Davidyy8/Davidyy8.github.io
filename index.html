@@ -3,29 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bucket List con Firebase</title>
+  <title>Bucket List Luisa y David</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- Sección autenticación -->
-  <div id="auth-section">
-    <h2>Registrarse</h2>
-    <input type="email" id="register-email" placeholder="Email" />
-    <input type="password" id="register-password" placeholder="Contraseña" />
-    <button id="register-btn">Registrarse</button>
-
-    <h2>Iniciar sesión</h2>
-    <input type="email" id="login-email" placeholder="Email" />
-    <input type="password" id="login-password" placeholder="Contraseña" />
-    <button id="login-btn">Iniciar sesión</button>
-
-    <button id="logout-btn" style="display:none;">Cerrar sesión</button>
-  </div>
-
   <!-- Sección de la app -->
-  <div id="app-section" style="display:none;">
-    <h1><h1><span style="color:pink;">&hearts;</span> Bucket List Luisa y David <span style="color:pink;">&hearts;</span></h1></h1>
+  <div id="app-section">
+    <h1><span style="color:pink;">&hearts;</span> Bucket List Luisa y David <span style="color:pink;">&hearts;</span></h1>
+
     <input type="text" id="task-input" placeholder="Añade una nueva actividad..." />
     <button id="add-task-btn">Añadir</button>
 
@@ -38,22 +24,9 @@
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-  <!-- Tu script -->
+  <!-- Tu script JS -->
   <script src="script.js"></script>
-  <input id="task-input" placeholder="Nueva tarea">
-<button id="add-task-btn">Añadir</button>
-
-<ul id="bucket-list"></ul>
-<ul id="completed-list"></ul>
-<!-- Firebase (compat) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
-<!-- Tu script -->
-<script src="script.js"></script>
-
 </body>
 </html>
