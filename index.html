@@ -3,36 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bucket List Luisa y David</title>
+  <title>Bucket List con Firebase</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1><span style="color:pink;">&hearts;</span> Bucket List Luisa y David <span style="color:pink;">&hearts;</span></h1>
-  <div id="new-task">
-    <input type="text" id="task-input" placeholder="Añade una nueva actividad..." />
-    <button id="add-task-btn">Añadir</button>
-  </div>
 
-  <h2>Actividades Pendientes</h2>
-  <ul id="bucket-list"></ul>
-
-  <h2>Actividades Completadas</h2>
-  <ul id="completed-list"></ul>
-
-  <h2>Galería de Fotos</h2>
-  <div id="gallery"></div>
-
-  <script src="app.js"></script>
-  <!-- Firebase App (core) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-
-<!-- Firebase Authentication -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-
-<!-- Firebase Firestore -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
-  <!-- Sección de autenticación -->
+  <!-- Sección autenticación -->
   <div id="auth-section">
     <h2>Registrarse</h2>
     <input type="email" id="register-email" placeholder="Email" />
@@ -47,14 +23,25 @@
     <button id="logout-btn" style="display:none;">Cerrar sesión</button>
   </div>
 
-  <!-- Sección de la app (lista tareas) oculta inicialmente -->
+  <!-- Sección de la app -->
   <div id="app-section" style="display:none;">
-    <h1>Bucket List</h1>
-    <!-- Aquí va todo el contenido de la app -->
-    ...
+    <h1><h1><span style="color:pink;">&hearts;</span> Bucket List Luisa y David <span style="color:pink;">&hearts;</span></h1></h1>
+    <input type="text" id="task-input" placeholder="Añade una nueva actividad..." />
+    <button id="add-task-btn">Añadir</button>
+
+    <h2>Actividades Pendientes</h2>
+    <ul id="bucket-list"></ul>
+
+    <h2>Actividades Completadas</h2>
+    <ul id="completed-list"></ul>
   </div>
 
-  <!-- Firebase scripts y tu script JS -->
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
+  <!-- Tu script -->
+  <script src="script.js"></script>
 </body>
 </html>
